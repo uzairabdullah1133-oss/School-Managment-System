@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign Up - Apexiums School management</title>
+    <link rel="stylesheet" href="style.css">
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+
+<body>
+
+    <div class="login-layout">
+        <div class="login-card">
+
+            <!-- New Single Column Design -->
+            <div class="login-header">
+                <div class="login-icon-circle">
+                    <i data-lucide="user-plus"></i>
+                </div>
+                <h2 class="login-title">Apexiums School management</h2>
+                <p class="login-subtitle">Create your account</p>
+            </div>
+
+            <div class="login-body">
+                <form id="signupForm">
+                    <div class="input-group">
+                        <label for="fullName">Full Name</label>
+                        <div style="position: relative;">
+                            <input type="text" id="fullName" placeholder="Enter your full name" required>
+                        </div>
+                    </div>
+
+                    <div class="input-group">
+                        <label for="email">Email Address</label>
+                        <div style="position: relative;">
+                            <input type="email" id="email" placeholder="Enter your email" required>
+                        </div>
+                    </div>
+
+                    <div class="input-group">
+                        <label for="password">Password</label>
+                        <div style="position: relative;">
+                            <input type="password" id="password" placeholder="Create a password" required>
+                        </div>
+                    </div>
+
+                    <div class="input-group">
+                        <label for="confirmPassword">Confirm Password</label>
+                        <div style="position: relative;">
+                            <input type="password" id="confirmPassword" placeholder="Confirm your password" required>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn btn-success" style="width: 100%;">Sign Up</button>
+
+                    <p class="login-footer">
+                        Already have an account? <a href="index.html">Sign in</a>
+                    </p>
+                </form>
+            </div>
+
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+    <script>
+        lucide.createIcons();
+
+        // Simple registration handler
+        document.getElementById('signupForm').addEventListener('submit', (e) => {
+            e.preventDefault();
+            const password = document.getElementById('password').value;
+            const confirm = document.getElementById('confirmPassword').value;
+
+            if (password !== confirm) {
+                alert("Passwords do not match!");
+                return;
+            }
+
+            alert("Registration successful! Please login.");
+            window.location.href = 'index.html';
+        });
+    </script>
+</body>
+
+</html>

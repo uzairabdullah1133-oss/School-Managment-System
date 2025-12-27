@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Fees - Apexiums School management</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        .classes-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+            gap: 1.25rem;
+            margin-bottom: 2rem;
+        }
+
+        .fee-card {
+            background: var(--surface-color);
+            border: 1px solid #eef2f6;
+            border-radius: 0.75rem;
+            padding: 1.25rem;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 70px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.02);
+        }
+
+        .fee-card:hover {
+            border-color: var(--primary-color);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(32, 176, 164, 0.1);
+        }
+
+        .class-name {
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--primary-color);
+        }
+
+        .class-count {
+            position: absolute;
+            top: -10px;
+            right: -10px;
+            background: var(--primary-color);
+            color: white;
+            border-radius: 50%;
+            width: 24px;
+            height: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.75rem;
+            font-weight: 700;
+            border: 2px solid white;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .fees-section {
+            display: none;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .fees-section.active {
+            display: block;
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .back-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.6rem 1.2rem;
+            background: var(--surface-color);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-md);
+            cursor: pointer;
+            transition: var(--transition);
+            color: var(--text-primary);
+            font-weight: 500;
+        }
+
+        .back-btn:hover {
+            background: #f8fafc;
+            border-color: var(--primary-color);
+            color: var(--primary-color);
+        }
+
+        .status-paid-badge {
+            background: #dcfce7;
+            color: #166534;
+            padding: 0.25rem 0.75rem;
+            border-radius: 999px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+
+        .status-unpaid-badge {
+            background: #fee2e2;
+            color: #991b1b;
+            padding: 0.25rem 0.75rem;
+            border-radius: 999px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+
+        .payment-date {
+            color: var(--text-secondary);
+            font-size: 0.85rem;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="dashboard-container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="logo-section">
+                <i data-lucide="graduation-cap"></i> Apexiums School management
+            </div>
+
+            <nav class="nav-links">
+                <a href="dashboard.html" class="nav-item">
+                    <i data-lucide="layout-dashboard"></i>
+                    <span>Dashboard</span>
+                </a>
+                <a href="students.html" class="nav-item">
+                    <i data-lucide="users"></i>
+                    <span>Students</span>
+                </a>
+                <a href="teachers.html" class="nav-item">
+                    <i data-lucide="book-open"></i>
+                    <span>Teachers</span>
+                </a>
+                <a href="staff.html" class="nav-item">
+                    <i data-lucide="briefcase"></i>
+                    <span>Staff</span>
+                </a>
+                <a href="classes.html" class="nav-item">
+                    <i data-lucide="school"></i>
+                    <span>Classes</span>
+                </a>
+                <a href="fees.html" class="nav-item active">
+                    <i data-lucide="credit-card"></i>
+                    <span>Fees</span>
+                </a>
+                <a href="finance.html" class="nav-item">
+                    <i data-lucide="receipt"></i>
+                    <span>Bills</span>
+                </a>
+                <a href="aboutme.html" class="nav-item">
+                    <i data-lucide="info"></i>
+                    <span>About Us</span>
+                </a>
+            </nav>
+
+            <a href="settings.html" class="user-profile">
+                <div class="avatar">AD</div>
+                <div class="user-info">
+                    <h4>Admin User</h4>
+                    <p>Principal</p>
+                </div>
+            </a>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <header class="header">
+                <h1 id="pageTitle">Student Fee Management</h1>
+                <div class="header-actions">
+                    <div class="search-bar">
+                        <i data-lucide="search" size="18" style="color: var(--text-secondary);"></i>
+                        <input type="text" id="feeSearchInput" placeholder="Search students...">
+                    </div>
+                </div>
+            </header>
+
+            <!-- Grid View -->
+            <div id="feesGridView">
+                <div class="classes-grid" id="feesClassGrid">
+                    <!-- Classes will be generated here -->
+                </div>
+            </div>
+
+            <!-- Detailed Table View -->
+            <div id="feesTableView" class="fees-section">
+                <div class="section-header">
+                    <div>
+                        <h2 id="selectedClassTitle" style="margin-bottom: 0.25rem;">Class Fees</h2>
+                        <p id="selectedClassSubtitle" style="color: var(--text-secondary); font-size: 0.9rem;">Review
+                            fee status and payment dates</p>
+                    </div>
+                    <button class="back-btn" onclick="backToFeesList()">
+                        <i data-lucide="arrow-left" size="18"></i> Back to Classes
+                    </button>
+                </div>
+
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Student Name</th>
+                                <th>Roll No</th>
+                                <th>Fee Amount</th>
+                                <th>Status</th>
+                                <th>Payment Date</th>
+                            </tr>
+                        </thead>
+                        <tbody id="studentFeeTableBody">
+                            <!-- Students will be populated here -->
+                        </tbody>
+                    </table>
+                    <div id="noFeeData"
+                        style="text-align: center; padding: 3rem; color: var(--text-secondary); display: none;">
+                        No students found for this class.
+                    </div>
+                </div>
+            </div>
+
+        </main>
+    </div>
+
+    <script src="script.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            renderFeesClassGrid();
+
+            // Search implementation
+            const searchInput = document.getElementById('feeSearchInput');
+            if (searchInput) {
+                searchInput.addEventListener('input', (e) => {
+                    const currentView = document.getElementById('feesTableView');
+                    if (currentView.classList.contains('active')) {
+                        const classId = currentView.dataset.classId;
+                        renderClassFeeTable(classId, e.target.value.toLowerCase());
+                    }
+                });
+            }
+        });
+
+        const feeClasses = [
+            { id: 'play', name: 'Play Group', keywords: ['play', 'pg', 'playgroup'] },
+            { id: 'nursery', name: 'Nursery', keywords: ['nursery', 'nursary'] },
+            { id: 'prep', name: 'Prep', keywords: ['prep', 'preschool'] },
+            { id: '1', name: 'Class One', keywords: ['1', 'one', '1st'] },
+            { id: '2', name: 'Class Two', keywords: ['2', 'two', '2nd'] },
+            { id: '3', name: 'Class Three', keywords: ['3', 'three', '3rd'] },
+            { id: '4', name: 'Class Four', keywords: ['4', 'four', '4th'] },
+            { id: '5', name: 'Class Five', keywords: ['5', 'five', '5th'] },
+            { id: '6', name: 'Class Six', keywords: ['6', 'six', '6th'] },
+            { id: '7', name: 'Class Seven', keywords: ['7', 'seven', '7th'] },
+            { id: '8', name: 'Class Eight', keywords: ['8', 'eight', '8th'] },
+            { id: '9', name: 'Class Nine', keywords: ['9', 'nine', '9th'] },
+            { id: '10', name: 'Class Ten', keywords: ['10', 'ten', '10th'] },
+        ];
+
+        function renderFeesClassGrid() {
+            const grid = document.getElementById('feesClassGrid');
+            const students = getData(STORAGE_KEY_STUDENTS);
+            grid.innerHTML = '';
+
+            feeClasses.forEach(cls => {
+                const classStudents = students.filter(s => {
+                    const sClass = s.classGrade.toLowerCase().trim();
+                    return cls.keywords.some(k => sClass === k || sClass === `class ${k}`);
+                });
+
+                const card = document.createElement('div');
+                card.className = 'fee-card';
+                card.onclick = () => showClassFees(cls.id);
+
+                card.innerHTML = `
+                    ${classStudents.length > 0 ? `<div class="class-count">${classStudents.length}</div>` : ''}
+                    <div class="class-name">${cls.name}</div>
+                `;
+                grid.appendChild(card);
+            });
+
+            if (window.lucide) lucide.createIcons();
+        }
+
+        function showClassFees(classId) {
+            const cls = feeClasses.find(c => c.id === classId);
+            if (!cls) return;
+
+            document.getElementById('feesGridView').style.display = 'none';
+            const tableView = document.getElementById('feesTableView');
+            tableView.classList.add('active');
+            tableView.dataset.classId = classId;
+
+            document.getElementById('selectedClassTitle').innerText = cls.name + ' Fees';
+            document.getElementById('pageTitle').innerText = 'Fee Records: ' + cls.name;
+
+            renderClassFeeTable(classId);
+        }
+
+        function renderClassFeeTable(classId, term = '') {
+            const tbody = document.getElementById('studentFeeTableBody');
+            const noData = document.getElementById('noFeeData');
+            const students = getData(STORAGE_KEY_STUDENTS);
+
+            const cls = feeClasses.find(c => c.id === classId);
+            let classStudents = students.filter(s => {
+                const sClass = s.classGrade.toLowerCase().trim();
+                return cls.keywords.some(k => sClass === k || sClass === `class ${k}`);
+            });
+
+            if (term) {
+                classStudents = classStudents.filter(s =>
+                    s.fullName.toLowerCase().includes(term) ||
+                    s.rollNo.toLowerCase().includes(term)
+                );
+            }
+
+            tbody.innerHTML = '';
+
+            if (classStudents.length === 0) {
+                noData.style.display = 'block';
+                return;
+            }
+
+            noData.style.display = 'none';
+            classStudents.forEach(s => {
+                const isPaid = s.feesStatus === 'Paid';
+                const paymentDate = isPaid ? (s.paymentDate || 'Recorded') : 'Not Paid';
+
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td><strong>${s.fullName}</strong></td>
+                    <td>${s.rollNo}</td>
+                    <td>PKR ${s.monthlyFee || '0'}</td>
+                    <td><span class="${isPaid ? 'status-paid-badge' : 'status-unpaid-badge'}">${s.feesStatus}</span></td>
+                    <td class="payment-date">${isPaid ? paymentDate : '<span style="color:#ef4444">Not Paid</span>'}</td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        function backToFeesList() {
+            document.getElementById('feesTableView').classList.remove('active');
+            document.getElementById('feesGridView').style.display = 'block';
+            document.getElementById('pageTitle').innerText = 'Student Fee Management';
+            document.getElementById('feeSearchInput').value = '';
+        }
+    </script>
+</body>
+
+</html>
